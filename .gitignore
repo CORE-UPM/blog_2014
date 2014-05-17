@@ -2,3 +2,4 @@ node_modules
 npm-debug.log
 blog.sqlite
 .env
+config/config.json
