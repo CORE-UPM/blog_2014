@@ -1,38 +1,49 @@
 <header>
-  <h2> Comentarios </h2>
+   <h2> <div class='pull-right'>
+            <span class='badge badge-info'> <%= comments.length %> </span>
+            <i class='icon-comment'></i> 
+        </div>
+        Comentarios </h2>
 </header>
 
 <% for (var i in comments) { %>
-  <article>
-     <header>
-        <em> <%= comments[i].author && comments[i].author.name || "Sin autor" %> </em>
-        <p>
+  <div class="comment">
+        <strong> <%= comments[i].author && comments[i].author.name || "Sin autor" %> </strong> comentó:
+        <em class="pull-right">
           <%= comments[i].updatedAt.toLocaleDateString() %>
-        </p>
-   </header>
+        </em>
+     
      
      <p>
        <%- escapeText(comments[i].body) %>
      </p>
 
-     <footer>
+     <div class="pull-right">
 
       <% if (session.user && session.user.id == comments[i].AuthorId) {%>
 
         <% var formname = 'fci' + i; %>
         <form method='post' action='/posts/<%= post.id %>/comments/<%= comments[i].id %>' id='<%= formname %>'>
           <input type='hidden' name='_method' value='delete'>
-          <a href="/posts/<%= post.id %>/comments/<%= comments[i].id %>/edit"> Editar </a> 
-          <a href="" 
+
+          <a class='btn btn-warning btn-mini' href="/posts/<%= post.id %>/comments/<%= comments[i].id %>/edit">
+             <i class='icon-edit icon-white'></i> Editar 
+          </a> 
+
+          <a class='btn btn-danger btn-mini' href="" 
              onclick="confirmarSubmit('¿Seguro que desea borrar el comentario?', 
-                                      '<%= formname %>'); return false"> Borrar </a>  
+                                      '<%= formname %>'); return false">
+             <i class='icon-trash icon-white'></i> Borrar
+          </a>  
+                                      
         </form>
 
       <% } %>
 
-     </footer>
-  </article>
+     </div>
+  </div>
 <%  }; %>
+
 
 <footer>
   <nav>

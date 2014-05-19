@@ -1,42 +1,44 @@
-<header>
-  <h2> Posts </h2>
-</header>
 
 <% for (var i in posts) { %>
-  <article>
-     <header>
-        <h3> 
-          <a href='/posts/<%= posts[i].id %>'> <%= posts[i].title %> </a>
-        </h3>
-        <em> <%= posts[i].author && posts[i].author.name || "Sin autor" %> </em>
+  <div class="post">
+    <div class="page-header">
+      <h1>
+        <a href='/posts/<%= posts[i].id %>' class='titlelink'> <%= posts[i].title %> </a>
+        <small>por <em> <%= posts[i].author && posts[i].author.name || "Sin autor" %> </em></small>
+      </h1>
+     <em> <%= posts[i].updatedAt.toLocaleDateString() %></em>
+   </div>
+      
 
-     </header>
-     
-     <p>
-        <%= posts[i].body.slice(0,300) %> ... 
-     </p>
-
-     <footer>
-
+     <div class="pull-right">
       <% if (session.user && session.user.id == posts[i].AuthorId) {%>
 
         <% var formname = 'fpi' + i; %>
         <form method='post' action='/posts/<%= posts[i].id %>' id='<%= formname %>'>
           <input type='hidden' name='_method' value='delete'>
-          <a href="/posts/<%= posts[i].id %>/edit"> Editar </a> 
-          <a href="" 
+          <a class='btn btn-warning btn-mini' href="/posts/<%= posts[i].id %>/edit"> 
+             <i class='icon-edit icon-white'></i> Editar 
+          </a> 
+          <a class='btn btn-danger btn-mini' href="" 
              onclick="confirmarSubmit('¿Seguro que desea borrar el post?', 
-                                      '<%= formname %>'); return false"> Borrar </a>  
+                                      '<%= formname %>'); return false"> 
+             <i class='icon-trash icon-white'></i> Borrar
+          </a>  
         </form>
 
       <% } %>
+     </div>
 
-     </footer>
-  </article>
+     <p>
+        <%= posts[i].body.slice(0,1000) %> ... 
+     </p>
 
+  </div>
 <%  }; %>
+
 <footer>
   <nav>
-    <a href="/posts/new"> Crear nuevo Post </a>
+    <a href="/posts/new"> <i class='icon-plus-sign'></i> Crear nuevo Post </a>
   </nav>
 </footer>
+

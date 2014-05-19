@@ -1,17 +1,29 @@
-<div class='<%- validate_errors.title ? "invalid_field" : "field" %>'>
 
-  <label for="post_title">Titulo</label><br />
-  <input type="text" id="post_title" name="post[title]" size='80' value='<%= post.title%>' />
+<div class='form-group <%- validate_errors.title ? "invalid_field" : "field" %>'>
 
-</div>
+  <label class='col-md-2 control-label' for="post_title">Titulo</label>
 
- <div class='<%- validate_errors.body ? "invalid_field" : "field" %>'>
-
-  <label for="post_body">Contenido</label><br />
-  <textarea id="post_body" name="post[body]" rows="20" cols="80"><%= post.body %></textarea>
+  <div class="col-md-10">
+    <input  class="form-control" type="text" id="post_title" name="post[title]" size='80' value='<%= post.title%>' />
+  </div>
 
 </div>
 
-<div class="actions">
-  <input name="commit" type="submit" value="Salvar" />
+
+<div class='form-group <%- validate_errors.body ? "invalid_field" : "field" %>'>
+
+  <label class='col-md-2 control-label' for="post_body">Contenido</label><br />
+
+  <div class="col-md-10">
+      <textarea class="form-control" id="post_body" name="post[body]" rows="20" cols="80"><%= post.body %></textarea>
+  </div>
+
+</div>
+
+
+<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+         <button type='submit' class='btn btn-success'>Salvar</button>
+         <button type='reset' class='btn'>Limpiar</button>
+    </div>
 </div>

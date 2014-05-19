@@ -1,12 +1,18 @@
 
-<div class='<%- validate_errors.body ? "invalid_field" : "field" %>'>
+<div class='form-group <%- validate_errors.body ? "invalid_field" : "field" %>'>
 
-    <label for="comment_body">Contenido</label><br />
-    <textarea id="comment_body" name="comment[body]" rows="10" cols="80"><%= comment.body %></textarea>
+    <label class='col-md-2 control-label' for="comment_body">Contenido</label>
+
+    <div class="col-md-10">
+        <textarea class="form-control" id="comment_body" name="comment[body]" rows="10" cols="80"><%= comment.body %></textarea>
+    </div>
+
 </div>
 
-<div class="actions">
-    <input name="commit" type="submit" value="Salvar" />
+<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+         <button type='submit' class='btn btn-success'>Salvar</button>
+    </div>
 </div>
 
 
