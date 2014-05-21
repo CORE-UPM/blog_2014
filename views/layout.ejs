@@ -36,15 +36,15 @@
 
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-              <li><a href="/posts"><i class='icon-tasks icon-white'></i> Posts</a></li>
-              <li><a href="/users"><i class='icon-user icon-white'></i> Usuarios</a></li>
+              <li><a href="/posts"><i class='glyphicon glyphicon-list icon-white'></i> Posts</a></li>
+              <li><a href="/users"><i class='glyphicon glyphicon-user icon-white'></i> Usuarios</a></li>
           </ul>
 
 
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <i class="icon-user"></i> 
+                <i class="glyphicon glyphicon-user"></i> 
                   <% if (session.user) { %>
                     <%= session.user.name %>       
                   <% } else { %>

@@ -1,7 +1,7 @@
 <header>
    <h2> <div class='pull-right'>
             <span class='badge badge-info'> <%= comments.length %> </span>
-            <i class='icon-comment'></i> 
+            <i class='glyphicon glyphicon-comment'></i> 
         </div>
         Comentarios </h2>
 </header>
@@ -27,13 +27,13 @@
           <input type='hidden' name='_method' value='delete'>
 
           <a class='btn btn-warning btn-mini' href="/posts/<%= post.id %>/comments/<%= comments[i].id %>/edit">
-             <i class='icon-edit icon-white'></i> Editar 
+             <i class='glyphicon glyphicon-pencil icon-white'></i> Editar 
           </a> 
 
           <a class='btn btn-danger btn-mini' href="" 
              onclick="confirmarSubmit('¿Seguro que desea borrar el comentario?', 
                                       '<%= formname %>'); return false">
-             <i class='icon-trash icon-white'></i> Borrar
+             <i class='glyphicon glyphicon-trash icon-white'></i> Borrar
           </a>  
                                       
         </form>
