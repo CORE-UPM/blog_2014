@@ -6,14 +6,15 @@
 // middlewares o rutas.
 // Si no existe req.session.user, entonces es que aun no he hecho 
 // login, por lo que me redireccionan a una pantalla de login. 
-// Guardo cual es mi url para volver automaticamente a esa url 
-// despues de hacer login. 
-//
+// Guardo en redir cual es mi url para volver automaticamente a 
+// esa url despues de hacer login; pero si redir ya existe entonces
+// conservo su valor.
+// 
 exports.loginRequired = function (req, res, next) {
     if (req.session.user) {
         next();
     } else {
-        res.redirect('/login?redir=' + req.url);
+        res.redirect('/login?redir=' + (req.param('redir') || req.url));
     }
 };
 
