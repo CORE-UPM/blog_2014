@@ -82,10 +82,12 @@ router.delete('/posts/:postid([0-9]+)/comments/:commentid([0-9]+)',
 
 /* Rutas de Posts */
 
-router.get('/posts', postController.index);
+router.get('/posts',  postController.paginateIndex,
+                      postController.index);
 router.get('/posts/new', sessionController.loginRequired,
                          postController.new);
-router.get('/posts/:postid([0-9]+)', postController.show);
+router.get('/posts/:postid([0-9]+)', postController.paginateShow,
+                                     postController.show);
 router.post('/posts', sessionController.loginRequired,
                       postController.create);
 router.get('/posts/:postid([0-9]+)/edit', sessionController.loginRequired,
@@ -100,7 +102,8 @@ router.delete('/posts/:postid([0-9]+)', sessionController.loginRequired,
 
 /* Rutas de Users */
 
-router.get('/users', userController.index);
+router.get('/users',  userController.paginateIndex,
+                      userController.index);
 router.get('/users/new', userController.new);
 router.get('/users/:userid([0-9]+)', userController.show);
 router.post('/users', userController.create);

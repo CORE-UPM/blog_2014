@@ -1,7 +1,7 @@
 
 var models = require('../models');
 var crypto = require('crypto');
-
+var paginate = require('./paginate').paginate;
 
 /*
 *  Autoloading :userid
@@ -37,6 +37,43 @@ exports.loggedUserIsUser = function(req, res, next) {
    }
 };
 
+
+// Middleware para calcular la paginacion de index.
+// 
+// En req.pagination se guardan las opciones para usar en la 
+// llamada model.Post.findAll.
+// 
+// Y se crea una variable en res para guardar el HTML con los
+// botones del control de paginacion.
+exports.paginateIndex = function(req, res, next) {
+
+  // Numero de usuarios a mostrar por pagina:
+  var users_per_page = 3;
+
+  models.User
+    .count() // ¿Cuantos usuarios hay?
+    .success(function(count) {
+
+          // La pagina a mostrar viene en la query
+          var pageno = parseInt(req.query.pageno) || 1; 
+
+          // Datos para obtener los usuarios a mostrar se guardan en req.
+          req.pagination = { offset: users_per_page * (pageno - 1),
+                             limit: users_per_page
+                           };
+
+          // Crear un string con el HTML que pinta la botonera de paginacion.
+          // Lo añado como una variable local de res para que lo pinte el layout de la aplicacion.
+          res.locals.paginate_control = paginate(count, users_per_page, pageno, req.url);
+          next();
+    })
+    .error(function(error) { next(error); });
+}
+
+
+
+
+
 // ----------------------------------
 // Rutas
 // ----------------------------------
@@ -44,7 +81,9 @@ exports.loggedUserIsUser = function(req, res, next) {
 // GET /users
 exports.index = function(req, res, next) {
     models.User
-        .findAll({order: ['name']})
+        .findAll({order: ['name'],
+                  offset: req.pagination.offset,
+                  limit: req.pagination.limit})
         .success(function(users) {
             res.render('users/index', {
                 users: users

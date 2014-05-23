@@ -1,6 +1,6 @@
 
 var models = require('../models');
-
+var paginate = require('./paginate').paginate;
 
 // Autoload :postid
 exports.load = function(req, res, next, id) {
@@ -34,13 +34,82 @@ exports.loggedUserIsAuthor = function(req, res, next) {
 };
 
 
+// Middleware para calcular la paginacion de index.
+// 
+// En req.pagination se guardan las opciones para usar en la 
+// llamada model.Post.findAll.
+// 
+// Y se crea una variable en res para guardar el HTML con los
+// botones del control de paginacion.
+exports.paginateIndex = function(req, res, next) {
+
+  // Numero de Posts a mostrar por pagina:
+  var posts_per_page = 3;
+
+  models.Post
+    .count() // ¿Cuantos posts hay?
+    .success(function(count) {
+
+          // La pagina a mostrar viene en la query
+          var pageno = parseInt(req.query.pageno) || 1; 
+
+          // Datos para obtener los posts a mostrar se guardan en req.
+          req.pagination = { offset: posts_per_page * (pageno - 1),
+                             limit: posts_per_page
+                           };
+
+          // Crear un string con el HTML que pinta la botonera de paginacion.
+          // Lo añado como una variable local de res para que lo pinte el layout de la aplicacion.
+          res.locals.paginate_control = paginate(count, posts_per_page, pageno, req.url);
+          next();
+    })
+    .error(function(error) { next(error); });
+}
+
+
+
+// Middleware para calcular la paginacion de show.
+// 
+// En req.pagination se guardan las opciones para usar en la 
+// llamada model.Comment.findAll.
+// 
+// Y se crea una variable en res para guardar el HTML con los
+// botones del control de paginacion.
+exports.paginateShow = function(req, res, next) {
+
+  // Numero de comentarios a mostrar por pagina:
+  var comments_per_page = 3;
+
+  models.Comment
+    .count({where: {PostId: req.post.id}}) // ¿Cuantos comentarios tiene el post?
+    .success(function(count) {
+
+          // La pagina a mostrar viene en la query
+          var pageno = parseInt(req.query.pageno) || 1; 
+
+          // Datos para obtener los comentarios a mostrar se guardan en req.
+          req.pagination = { offset: comments_per_page * (pageno - 1),
+                             limit: comments_per_page
+                           };
+
+          // Crear un string con el HTML que pinta la botonera de paginacion.
+          // Lo añado como una variable local de res para que lo pinte el layout de la aplicacion.
+          res.locals.paginate_control = paginate(count, comments_per_page, pageno, req.url);
+          next();
+    })
+    .error(function(error) { next(error); });
+}
+
 //-----------------------------------------------------------
 
 
 // GET /posts
 exports.index = function(req, res, next) {
+
     models.Post
         .findAll({order: [['updatedAt','DESC']],
+                  offset: req.pagination.offset,
+                  limit: req.pagination.limit,
                   include: [ { model: models.User, 
                                as: 'Author' } 
                            ]
@@ -77,6 +146,8 @@ exports.show = function(req, res, next) {
                     models.Comment
                          .findAll({where: {PostId: req.post.id},
                                    order: [['updatedAt','DESC']],
+                                   offset: req.pagination.offset,
+                                   limit: req.pagination.limit,
                                    include: [{ model: models.User, as: 'Author' }] 
                          })
                          .success(function(comments) {
